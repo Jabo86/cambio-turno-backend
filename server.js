@@ -1,7 +1,15 @@
 const jsonServer = require('json-server');
 const server = jsonServer.create();
-const router = jsonServer.router('db.json');
 const middlewares = jsonServer.defaults();
+
+// Dati iniziali in memoria
+const initialData = {
+  richieste: [],
+  notifiche: []
+};
+
+// Crea un router con dati in memoria
+const router = jsonServer.router(initialData);
 
 server.use(middlewares);
 server.use(router);
