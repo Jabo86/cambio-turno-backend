@@ -1,0 +1,42 @@
+{
+  "richieste": [
+    {
+      "data": "2025-05-09",
+      "ruoloRichiedente": "OSS",
+      "nomeRichiedente": "ASTORINO FABIO",
+      "giornoCambio": "2025-05-10",
+      "vecchioTurnoRichiedente": "Pomeriggio",
+      "nuovoTurnoRichiedente": "Mattina",
+      "ruoloCollega": "OSS",
+      "nomeCollega": "MELLINATO EMANUELE",
+      "vecchioTurnoCollega": "Mattina",
+      "nuovoTurnoCollega": "Pomeriggio",
+      "firma": "",
+      "stato": "accettata",
+      "numeroGiorni": 1,
+      "id": 1
+    }
+  ],
+  "notifiche": [
+    {
+      "destinatario": "ASTORINO FABIO",
+      "messaggio": "La tua richiesta di cambio turno per il 2025-05-10 (Mattina) con MELLINATO EMANUELE è stata accettata.",
+      "id": 1
+    },
+    {
+      "destinatario": "MELLINATO EMANUELE",
+      "messaggio": "La richiesta di cambio turno per il 2025-05-10 (Pomeriggio) con ASTORINO FABIO è stata accettata.",
+      "id": 2
+    },
+    {
+      "destinatario": "ASTORINO FABIO",
+      "messaggio": "La tua richiesta di cambio turno per il 2025-05-10 (Mattina) con MELLINATO EMANUELE è stata accettata.",
+      "id": 3
+    },
+    {
+      "destinatario": "MELLINATO EMANUELE",
+      "messaggio": "La richiesta di cambio turno per il 2025-05-10 (Pomeriggio) con ASTORINO FABIO è stata accettata.",
+      "id": 4
+    }
+  ]
+}
