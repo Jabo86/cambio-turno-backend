@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Richiesta Cambio Turno</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+      margin: 0;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 1.5em;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 20px auto;
+      max-width: 150px;
+    }
+    .form-section {
+      max-width: 100%;
+      margin: 0 auto 30px auto;
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .section {
+      flex: 1 1 100%;
+      background-color: #fdfdfd;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    .section h3 {
+      margin-top: 0;
+      color: #007bff;
+      font-size: 1.2em;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1em;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      padding: 12px;
+      font-size: 1em;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .tabella-turni {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    .tabella-turni th, .tabella-turni td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+      font-size: 0.9em;
+    }
+    .tabella-turni th {
+      background-color: #f0f0f0;
+    }
+    .calendar {
+      max-width: 100%;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+    .calendar-day {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+      min-height: 80px;
+      position: relative;
+      font-size: 0.85em;
+    }
+    .calendar-day.header {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+    .request {
+      background-color: #ffeb3b;
+      padding: 5px;
+      margin: 5px 0;
+      border-radius: 4px;
+      font-size: 0.8em;
+      cursor: pointer;
+    }
+    .request.accepted {
+      background-color: #4caf50;
+      color: #fff;
+    }
+    .request.rejected {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    .login-section {
+      max-width: 100%;
+      margin: 20px auto;
+      text-align: center;
+    }
+    .notifications {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #e8f4f8;
+      border-radius: 4px;
+    }
+    .notification {
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+      font-size: 0.9em;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      max-width: 90%;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    .modal-content h3 {
+      margin-top: 0;
+      font-size: 1.2em;
+    }
+    .modal-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    .modal-content th, .modal-content td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+      font-size: 0.85em;
+    }
+    .modal-content th {
+      background-color: #f0f0f0;
+    }
+    .close-modal {
+      background-color: #dc3545;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      float: right;
+      font-size: 0.9em;
+    }
+    .close-modal:hover {
+      background-color: #c82333;
+    }
+    .reject-button {
+      background-color: #dc3545;
+      color: #fff;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 5px;
+      font-size: 0.9em;
+    }
+    .reject-button:hover {
+      background-color: #c82333;
+    }
+    @media (min-width: 600px) {
+      .form-section, .calendar {
+        max-width: 1000px;
+      }
+      .section {
+        flex: 1 1 450px;
+      }
+      .modal-content {
+        max-width: 800px;
+      }
+    }
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      h2 {
+        font-size: 1.3em;
+      }
+      .logo {
+        max-width: 120px;
+      }
+      .form-section, .calendar {
+        padding: 10px;
+      }
+      button {
+        padding: 10px;
+        font-size: 0.9em;
+      }
+      .calendar-day {
+        min-height: 60px;
+        font-size: 0.75em;
+      }
+      .request {
+        font-size: 0.7em;
+      }
+      .modal-content {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="loginSection" class="login-section">
+    <h2>Accesso</h2>
+    <select id="userSelect" required>
+      <option value="">-- Seleziona Utente --</option>
+      <option value="coordinatore">Coordinatore</option>
+    </select>
+    <input type="password" id="password" placeholder="Inserisci Password" required>
+    <button onclick="login()">Accedi</button>
+  </div>
+
+  <div id="calendarSection" class="calendar" style="display: none;">
+    <img src="https://www.aulss3.veneto.it/myportal/AU12VE/api/content/download?id=639c4f6e94addd008c2caa83" alt="Logo" class="logo">
+    <h2>Calendario Richieste Cambio Turno</h2>
+    <div class="calendar-header">
+      <button onclick="previousMonth()">◄</button>
+      <h3 id="calendarTitle"></h3>
+      <button onclick="nextMonth()">►</button>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+    <button onclick="logout()" style="margin-top: 20px;">Esci</button>
+  </div>
+
+  <div id="formSection" style="display: none;">
+    <img src="https://www.aulss3.veneto.it/myportal/AU12VE/api/content/download?id=639c4f6e94addd008c2caa83" alt="Logo" class="logo">
+    <h2>Richiesta Cambio Turno</h2>
+    <div class="notifications" id="notifications"></div>
+    <form id="cambioTurnoForm">
+      <div class="form-section">
+        <label for="data">📅 Data della Richiesta</label>
+        <input type="date" id="data" required>
+      </div>
+
+      <div class="form-section form-container">
+        <div class="section">
+          <h3>Operatore che Richiede</h3>
+          <label for="ruoloRichiedente">Ruolo</label>
+          <select id="ruoloRichiedente" required>
+            <option value="">-- Seleziona Ruolo --</option>
+            <option value="OSS">Operatore Socio Sanitario (OSS)</option>
+            <option value="Infermiere">Infermiere</option>
+          </select>
+
+          <label for="nomeRichiedente">Nome e Cognome</label>
+          <select id="nomeRichiedente" required></select>
+
+          <label for="giornoCambio">Giorno del Cambio</label>
+          <input type="date" id="giornoCambio" required>
+
+          <label for="vecchioTurnoRichiedente">Vecchio Turno</label>
+          <select id="vecchioTurnoRichiedente" required>
+            <option value="">-- Seleziona --</option>
+            <option value="Mattina">Mattina</option>
+            <option value="Pomeriggio">Pomeriggio</option>
+            <option value="Notte">Notte</option>
+            <option value="Smonto">Smonto</option>
+            <option value="Riposo">Riposo</option>
+          </select>
+
+          <label for="nuovoTurnoRichiedente">Nuovo Turno</label>
+          <select id="nuovoTurnoRichiedente" required>
+            <option value="">-- Seleziona --</option>
+            <option value="Mattina">Mattina</option>
+            <option value="Pomeriggio">Pomeriggio</option>
+            <option value="Notte">Notte</option>
+            <option value="Smonto">Smonto</option>
+            <option value="Riposo">Riposo</option>
+          </select>
+        </div>
+
+        <div class="section">
+          <h3>Operatore che Accetta</h3>
+          <label for="ruoloCollega">Ruolo</label>
+          <select id="ruoloCollega" required>
+            <option value="">-- Seleziona Ruolo --</option>
+            <option value="OSS">Operatore Socio Sanitario (OSS)</option>
+            <option value="Infermiere">Infermiere</option>
+          </select>
+
+          <label for="nomeCollega">Nome e Cognome</label>
+          <select id="nomeCollega" required></select>
+
+          <label for="vecchioTurnoCollega">Vecchio Turno</label>
+          <select id="vecchioTurnoCollega" required>
+            <option value="">-- Seleziona --</option>
+            <option value="Mattina">Mattina</option>
+            <option value="Pomeriggio">Pomeriggio</option>
+            <option value="Notte">Notte</option>
+            <option value="Smonto">Smonto</option>
+            <option value="Riposo">Riposo</option>
+          </select>
+
+          <label for="nuovoTurnoCollega">Nuovo Turno</label>
+          <select id="nuovoTurnoCollega" required>
+            <option value="">-- Seleziona --</option>
+            <option value="Mattina">Mattina</option>
+            <option value="Pomeriggio">Pomeriggio</option>
+            <option value="Notte">Notte</option>
+            <option value="Smonto">Smonto</option>
+            <option value="Riposo">Riposo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <label for="giorniCambio">Seleziona il numero di giorni:</label>
+        <select id="giorniCambio">
+          <option value="1">1 Giorno</option>
+          <option value="2">2 Giorni</option>
+          <option value="3">3 Giorni</option>
+          <option value="4">4 Giorni</option>
+        </select>
+
+        <table id="tabellaTurni" class="tabella-turni">
+          <thead>
+            <tr>
+              <th>Giorno</th>
+              <th id="headerRichiedente">Turno Richiedente</th>
+              <th id="headerCollega">Turno Collega</th>
+            </tr>
+          </thead>
+          <tbody id="turniTabella"></tbody>
+        </table>
+      </div>
+
+      <div class="form-section" style="max-width: 100%; margin: 20px auto;">
+        <label for="firma">Firma del Richiedente</label>
+        <input type="text" id="firma" required>
+      </div>
+
+      <button type="button" onclick="submitRequest()">Invia Richiesta</button>
+      <button type="button" onclick="logout()" style="margin-top: 10px; background-color: #dc3545;">Esci</button>
+    </form>
+  </div>
+
+  <div id="requestModal" class="modal">
+    <div class="modal-content">
+      <h3>Dettagli Richieste Cambio Turno</h3>
+      <button class="close-modal" onclick="closeModal()">Chiudi</button>
+      <div id="requestDetails"></div>
+    </div>
+  </div>
+
+  <script>
+    // URL del backend
+    const API_URL = "http://localhost:3000"; // Cambia con l'URL di Vercel se ospitato
+
+    // Dati Operatori
+    const turnistiOSS = [
+      { nome: "ASTORINO FABIO" },
+      { nome: "PALMIERI SILVANA" },
+      { nome: "LONGATO MICHELA" },
+      { nome: "PIGOZZO MARIA CHIARA" },
+      { nome: "GRIMALDO LAURA" },
+      { nome: "SCANTAMBURLO CHIARA" },
+      { nome: "D'ESTE KATIA" },
+      { nome: "CAZZIN MONICA" },
+      { nome: "BOLDRIN GIADA" },
+      { nome: "BARUZZO ANNA" },
+      { nome: "MELLINATO EMANUELE" },
+      { nome: "BORGHESANI VITTORIO" }
+    ];
+
+    const semiturnistiOSS = [
+      { nome: "SIMION VALENTINA" },
+      { nome: "BERTO GIOVANNA" },
+      { nome: "MASON MARA" },
+      { nome: "CALLEGARO KATIA GIULIANA" },
+      { nome: "GRINZATO LINDA" },
+      { nome: "BONSO FRANCESCA" },
+      { nome: "GIUDONE ASSUNTA" },
+      { nome: "AGOSTA MILÙ CARMELA" },
+      { nome: "SANGIORGI WALLY" },
+      { nome: "DAL CORSO ELETTRA" },
+      { nome: "BALLARIN ORNELLA" }
+    ];
+
+    const turnistiInfermiere = [
+      { nome: "BATTAN BEATRICE" },
+      { nome: "DORO FRANCESCO" },
+      { nome: "TICONA SOTELO JESSICA ALEJANDRA" },
+      { nome: "ACCARINO ANTONIO" },
+      { nome: "MURKJA ALBANA" },
+      { nome: "DI LUCCIA GIUSEPPE" },
+      { nome: "GILL YASMINE" },
+      { nome: "VANGELISTA STEFANIA" },
+      { nome: "CARRARO ELEONORA" },
+      { nome: "FERRINI LAURA" },
+      { nome: "MARINI MILENA" },
+      { nome: "CORO’ LUISA" }
+    ];
+
+    // Credenziali (nome: password)
+    const credentials = {
+      coordinatore: "coordinatore123",
+      "ASTORINO FABIO": "fabio2025",
+      "PALMIERI SILVANA": "silvana2025",
+      "LONGATO MICHELA": "michela2025",
+      "PIGOZZO MARIA CHIARA": "mariachiara2025",
+      "GRIMALDO LAURA": "laura2025",
+      "SCANTAMBURLO CHIARA": "chiara2025",
+      "D'ESTE KATIA": "katia2025",
+      "CAZZIN MONICA": "monica2025",
+      "BOLDRIN GIADA": "giada2025",
+      "BARUZZO ANNA": "anna2025",
+      "MELLINATO EMANUELE": "emanuele2025",
+      "BORGHESANI VITTORIO": "vittorio2025",
+      "SIMION VALENTINA": "valentina2025",
+      "BERTO GIOVANNA": "giovanna2025",
+      "MASON MARA": "mara2025",
+      "CALLEGARO KATIA GIULIANA": "katiagiuliana2025",
+      "GRINZATO LINDA": "linda2025",
+      "BONSO FRANCESCA": "francesca2025",
+      "GIUDONE ASSUNTA": "assunta2025",
+      "AGOSTA MILÙ CARMELA": "milucarmela2025",
+      "SANGIORGI WALLY": "wally2025",
+      "DAL CORSO ELETTRA": "elettra2025",
+      "BALLARIN ORNELLA": "ornella2025",
+      "BATTAN BEATRICE": "beatrice2025",
+      "DORO FRANCESCO": "francesco2025",
+      "TICONA SOTELO JESSICA ALEJANDRA": "jessica2025",
+      "ACCARINO ANTONIO": "antonio2025",
+      "MURKJA ALBANA": "albana2025",
+      "DI LUCCIA GIUSEPPE": "giuseppe2025",
+      "GILL YASMINE": "yasmine2025",
+      "VANGELISTA STEFANIA": "stefania2025",
+      "CARRARO ELEONORA": "eleonora2025",
+      "FERRINI LAURA": "laura2025",
+      "MARINI MILENA": "milena2025",
+      "CORO’ LUISA": "luisa2025"
+    };
+
+    // Stato autenticazione
+    let currentUser = null;
+    let isCoordinatore = false;
+
+    // Funzioni per il backend con debug migliorato
+    async function loadRequests() {
+      try {
+        console.log("Caricamento richieste da:", `${API_URL}/richieste`);
+        const response = await fetch(`${API_URL}/richieste`);
+        if (!response.ok) {
+          throw new Error(`Errore HTTP: ${response.status} - ${response.statusText}`);
+        }
+        const data = await response.json();
+        console.log("Richieste caricate:", data);
+        return data;
+      } catch (error) {
+        console.error("Errore caricamento richieste:", error);
+        alert("Impossibile caricare le richieste. Verifica la connessione al backend.");
+        return [];
+      }
+    }
+
+    async function saveRequest(richiesta) {
+      try {
+        console.log("Salvataggio richiesta:", richiesta);
+        const response = await fetch(`${API_URL}/richieste`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(richiesta)
+        });
+        if (!response.ok) {
+          throw new Error(`Errore HTTP: ${response.status} - ${response.statusText}`);
+        }
+        const savedRequest = await response.json();
+        console.log("Richiesta salvata:", savedRequest);
+        return savedRequest;
+      } catch (error) {
+        console.error("Errore salvataggio richiesta:", error);
+        alert("Errore durante il salvataggio della richiesta.");
+      }
+    }
+
+    async function updateRequest(id, updates) {
+      try {
+        console.log("Aggiornamento richiesta ID:", id, "con:", updates);
+        const response = await fetch(`${API_URL}/richieste/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updates)
+        });
+        if (!response.ok) {
+          throw new Error(`Errore HTTP: ${response.status} - ${response.statusText}`);
+        }
+        console.log("Richiesta aggiornata con successo");
+      } catch (error) {
+        console.error("Errore aggiornamento richiesta:", error);
+        alert("Errore durante l'aggiornamento della richiesta.");
+      }
+    }
+
+    async function loadNotifications() {
+      try {
+        console.log("Caricamento notifiche da:", `${API_URL}/notifiche`);
+        const response = await fetch(`${API_URL}/notifiche`);
+        if (!response.ok) {
+          throw new Error(`Errore HTTP: ${response.status} - ${response.statusText}`);
+        }
+        const data = await response.json();
+        console.log("Notifiche caricate:", data);
+        return data;
+      } catch (error) {
+        console.error("Errore caricamento notifiche:", error);
+        alert("Impossibile caricare le notifiche. Verifica la connessione al backend.");
+        return [];
+      }
+    }
+
+    async function saveNotification(notifica) {
+      try {
+        console.log("Salvataggio notifica:", notifica);
+        const response = await fetch(`${API_URL}/notifiche`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(notifica)
+        });
+        if (!response.ok) {
+          throw new Error(`Errore HTTP: ${response.status} - ${response.statusText}`);
+        }
+        console.log("Notifica salvata con successo");
+      } catch (error) {
+        console.error("Errore salvataggio notifica:", error);
+        alert("Errore durante il salvataggio della notifica.");
+      }
+    }
+
+    // Richiedi permesso per notifiche
+    function requestNotificationPermission() {
+      if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            console.log("Permesso per notifiche concesso");
+          } else {
+            alert("Per ricevere notifiche, abilita le notifiche nel browser.");
+          }
+        });
+      }
+    }
+
+    // Invia notifica browser
+    function sendNotification(title, body) {
+      if (Notification.permission === "granted") {
+        new Notification(title, { body });
+        console.log("Notifica inviata:", title, body);
+      } else {
+        console.log("Notifiche non consentite, messaggio salvato:", body);
+      }
+    }
+
+    // Inizializza il selettore utenti
+    function initUserSelect() {
+      const userSelect = document.getElementById("userSelect");
+      userSelect.innerHTML = "<option value=''>-- Seleziona Utente --</option>";
+      userSelect.innerHTML += "<option value='coordinatore'>Coordinatore</option>";
+      [...turnistiOSS, ...semiturnistiOSS, ...turnistiInfermiere].forEach(op => {
+        userSelect.innerHTML += `<option value="${op.nome}">${op.nome}</option>`;
+      });
+      console.log("Selettore utenti inizializzato");
+    }
+
+    // Login
+    async function login() {
+      const user = document.getElementById("userSelect").value;
+      const password = document.getElementById("password").value;
+      console.log("Utente selezionato:", user);
+      console.log("Password inserita:", password);
+      console.log("Password attesa:", credentials[user]);
+
+      if (credentials[user] === password) {
+        currentUser = user;
+        isCoordinatore = user === "coordinatore";
+        document.getElementById("loginSection").style.display = "none";
+        requestNotificationPermission();
+        if (isCoordinatore) {
+          document.getElementById("calendarSection").style.display = "block";
+          document.getElementById("formSection").style.display = "none";
+          await renderCalendar();
+        } else {
+          document.getElementById("calendarSection").style.display = "none";
+          document.getElementById("formSection").style.display = "block";
+          await renderNotifications();
+          document.getElementById("nomeRichiedente").value = user;
+          document.getElementById("nomeRichiedente").disabled = true;
+          aggiornaSelezioni();
+        }
+      } else {
+        alert("Credenziali errate! Riprova.");
+      }
+    }
+
+    // Logout
+    function logout() {
+      currentUser = null;
+      isCoordinatore = false;
+      document.getElementById("loginSection").style.display = "block";
+      document.getElementById("calendarSection").style.display = "none";
+      document.getElementById("formSection").style.display = "none";
+      document.getElementById("cambioTurnoForm").reset();
+      document.getElementById("notifications").innerHTML = "";
+      closeModal();
+      console.log("Logout effettuato");
+    }
+
+    // Calendario
+    let currentDate = new Date();
+
+    async function renderCalendar() {
+      const calendarGrid = document.getElementById("calendarGrid");
+      const calendarTitle = document.getElementById("calendarTitle");
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+
+      calendarTitle.textContent = `${currentDate.toLocaleString("it-IT", { month: "long" })} ${year}`;
+      calendarGrid.innerHTML = "";
+
+      const days = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
+      days.forEach(day => {
+        const dayHeader = document.createElement("div");
+        dayHeader.className = "calendar-day header";
+        dayHeader.textContent = day;
+        calendarGrid.appendChild(dayHeader);
+      });
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const startDay = firstDay === 0 ? 6 : firstDay - 1;
+
+      for (let i = 0; i < startDay; i++) {
+        const emptyDay = document.createElement("div");
+        emptyDay.className = "calendar-day";
+        calendarGrid.appendChild(emptyDay);
+      }
+
+      const richieste = await loadRequests();
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayElement = document.createElement("div");
+        dayElement.className = "calendar-day";
+        dayElement.textContent = day;
+
+        const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        const richiesteGiorno = richieste.filter(r => r.giornoCambio === dateStr);
+
+        richiesteGiorno.forEach((richiesta, index) => {
+          const requestElement = document.createElement("div");
+          requestElement.className = `request ${richiesta.stato === "accettata" ? "accepted" : richiesta.stato === "respinta" ? "rejected" : ""}`;
+          requestElement.textContent = `${richiesta.nomeRichiedente} → ${richiesta.nuovoTurnoRichiedente}`;
+          requestElement.onclick = () => showRequestDetails(dateStr);
+          dayElement.appendChild(requestElement);
+        });
+
+        calendarGrid.appendChild(dayElement);
+      }
+      console.log("Calendario renderizzato per:", `${currentDate.toLocaleString("it-IT", { month: "long" })} ${year}`);
+    }
+
+    function previousMonth() {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderCalendar();
+    }
+
+    function nextMonth() {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderCalendar();
+    }
+
+    async function showRequestDetails(date) {
+      const richieste = await loadRequests();
+      const richiesteGiorno = richieste.filter(r => r.giornoCambio === date);
+
+      const modal = document.getElementById("requestModal");
+      const detailsDiv = document.getElementById("requestDetails");
+      detailsDiv.innerHTML = `
+        <h4>Richieste per il ${date}</h4>
+        ${richiesteGiorno.length === 0 ? "<p>Nessuna richiesta per questa data.</p>" : richiesteGiorno.map((richiesta, idx) => `
+          <div style="margin-bottom: 20px;">
+            <p><strong>Richiesta ${idx + 1}</strong></p>
+            <p><strong>Data della Richiesta:</strong> ${richiesta.data}</p>
+            <p><strong>Numero di Giorni:</strong> ${richiesta.numeroGiorni || 1}</p>
+            <p><strong>Richiedente:</strong> ${richiesta.ruoloRickiedente} - ${richiesta.nomeRichiedente}</p>
+            <p><strong>Collega:</strong> ${richiesta.ruoloCollega} - ${richiesta.nomeCollega}</p>
+            <p><strong>Firma:</strong> ${richiesta.firma}</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Vecchio Turno Richiedente</th>
+                  <th>Nuovo Turno Richiedente</th>
+                  <th>Vecchio Turno Collega</th>
+                  <th>Nuovo Turno Collega</th>
+                  <th>Stato</th>
+                  <th>Azione</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>${richiesta.giornoCambio}</td>
+                  <td>${richiesta.vecchioTurnoRichiedente}</td>
+                  <td>${richiesta.nuovoTurnoRichiedente}</td>
+                  <td>${richiesta.vecchioTurnoCollega}</td>
+                  <td>${richiesta.nuovoTurnoCollega}</td>
+                  <td>${richiesta.stato === "accettata" ? "Accettata" : richiesta.stato === "respinta" ? "Respinta" : "Pendente"}</td>
+                  <td>
+                    ${richiesta.stato === "pendente" && richiesta.id ? `
+                      <button onclick="acceptRequest('${richiesta.giornoCambio}', '${richiesta.id}')">Accetta</button>
+                      <button class="reject-button" onclick="rejectRequest('${richiesta.giornoCambio}', '${richiesta.id}')">Respinto</button>
+                    ` : ""}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `).join("")}
+      `;
+      modal.style.display = "flex";
+      console.log("Modale aperta per data:", date, "con richieste:", richiesteGiorno);
+    }
+
+    function closeModal() {
+      document.getElementById("requestModal").style.display = "none";
+      document.getElementById("requestDetails").innerHTML = "";
+      console.log("Modale chiusa");
+    }
+
+    async function acceptRequest(date, id) {
+      if (!id) {
+        console.error("ID richiesta non valido:", id);
+        alert("Errore: ID richiesta non valido.");
+        return;
+      }
+
+      const richieste = await loadRequests();
+      const richiesta = richieste.find(r => String(r.id) === String(id) && r.giornoCambio === date);
+      if (!richiesta) {
+        console.error("Richiesta non trovata per ID:", id, "e data:", date);
+        alert("Errore: Richiesta non trovata.");
+        return;
+      }
+
+      const notificaRichiedente = {
+        destinatario: richiesta.nomeRichiedente,
+        messaggio: `La tua richiesta di cambio turno per il ${richiesta.giornoCambio} (${richiesta.nuovoTurnoRichiedente}) con ${richiesta.nomeCollega} è stata accettata.`
+      };
+      const notificaCollega = {
+        destinatario: richiesta.nomeCollega,
+        messaggio: `La richiesta di cambio turno per il ${richiesta.giornoCambio} (${richiesta.nuovoTurnoCollega}) con ${richiesta.nomeRichiedente} è stata accettata.`
+      };
+
+      try {
+        await saveNotification(notificaRichiedente);
+        await saveNotification(notificaCollega);
+        await updateRequest(id, { ...richiesta, stato: "accettata" });
+
+        if (currentUser === richiesta.nomeRichiedente) {
+          sendNotification("Richiesta Accettata", notificaRichiedente.messaggio);
+        }
+        if (currentUser === richiesta.nomeCollega) {
+          sendNotification("Richiesta Accettata", notificaCollega.messaggio);
+        }
+
+        await renderCalendar();
+        await showRequestDetails(date);
+        if (!isCoordinatore && [richiesta.nomeRichiedente, richiesta.nomeCollega].includes(currentUser)) {
+          await renderNotifications();
+        }
+      } catch (error) {
+        console.error("Errore durante l'accettazione della richiesta:", error);
+        alert("Errore durante l'accettazione della richiesta.");
+      }
+    }
+
+    async function rejectRequest(date, id) {
+      if (!id) {
+        console.error("ID richiesta non valido:", id);
+        alert("Errore: ID richiesta non valido.");
+        return;
+      }
+
+      const richieste = await loadRequests();
+      const richiesta = richieste.find(r => String(r.id) === String(id) && r.giornoCambio === date);
+      if (!richiesta) {
+        console.error("Richiesta non trovata per ID:", id, "e data:", date);
+        alert("Errore: Richiesta non trovata.");
+        return;
+      }
+
+      const notificaRichiedente = {
+        destinatario: richiesta.nomeRichiedente,
+        messaggio: `La tua richiesta di cambio turno per il ${richiesta.giornoCambio} (${richiesta.nuovoTurnoRichiedente}) con ${richiesta.nomeCollega} è stata respinta.`
+      };
+      const notificaCollega = {
+        destinatario: richiesta.nomeCollega,
+        messaggio: `La richiesta di cambio turno per il ${richiesta.giornoCambio} (${richiesta.nuovoTurnoCollega}) con ${richiesta.nomeRichiedente} è stata respinta.`
+      };
+
+      try {
+        await saveNotification(notificaRichiedente);
+        await saveNotification(notificaCollega);
+        await updateRequest(id, { ...richiesta, stato: "respinta" });
+
+        if (currentUser === richiesta.nomeRichiedente) {
+          sendNotification("Richiesta Respinta", notificaRichiedente.messaggio);
+        }
+        if (currentUser === richiesta.nomeCollega) {
+          sendNotification("Richiesta Respinta", notificaCollega.messaggio);
+        }
+
+        await renderCalendar();
+        await showRequestDetails(date);
+        if (!isCoordinatore && [richiesta.nomeRichiedente, richiesta.nomeCollega].includes(currentUser)) {
+          await renderNotifications();
+        }
+      } catch (error) {
+        console.error("Errore durante il rifiuto della richiesta:", error);
+        alert("Errore durante il rifiuto della richiesta.");
+      }
+    }
+
+    // Notifiche
+    async function renderNotifications() {
+      const notifiche = await loadNotifications();
+      const notificationsDiv = document.getElementById("notifications");
+      const userNotifications = notifiche.filter(n => n.destinatario === currentUser);
+      notificationsDiv.innerHTML = "<h3>Notifiche</h3>";
+      if (userNotifications.length === 0) {
+        notificationsDiv.innerHTML += "<p>Nessuna notifica.</p>";
+      } else {
+        userNotifications.forEach(n => {
+          const notifica = document.createElement("div");
+          notifica.className = "notification";
+          notifica.textContent = n.messaggio;
+          notificationsDiv.appendChild(notifica);
+        });
+      }
+      console.log("Notifiche renderizzate per:", currentUser, "Numero:", userNotifications.length);
+    }
+
+    // Funzioni Form
+    function aggiornaSelezioni() {
+      const ruoloRichiedente = document.getElementById("ruoloRichiedente").value;
+      const ruoloCollegaSelect = document.getElementById("ruoloCollega");
+      const selectRichiedente = document.getElementById("nomeRichiedente");
+      const selectCollega = document.getElementById("nomeCollega");
+
+      const turnistiRichiedente = ruoloRichiedente === "OSS" ? [...turnistiOSS, ...semiturnistiOSS] : ruoloRichiedente === "Infermiere" ? turnistiInfermiere : [];
+      selectRichiedente.innerHTML = "<option value=''>-- Seleziona Nome --</option>";
+      turnistiRichiedente.forEach(p => {
+        selectRichiedente.innerHTML += `<option value="${p.nome}" ${p.nome === currentUser ? "selected" : ""}>${p.nome}</option>`;
+      });
+
+      if (ruoloRichiedente === "OSS") {
+        ruoloCollegaSelect.value = "OSS";
+        ruoloCollegaSelect.querySelector("option[value='OSS']").disabled = false;
+        ruoloCollegaSelect.querySelector("option[value='Infermiere']").disabled = true;
+      } else if (ruoloRichiedente === "Infermiere") {
+        ruoloCollegaSelect.value = "Infermiere";
+        ruoloCollegaSelect.querySelector("option[value='Infermiere']").disabled = false;
+        ruoloCollegaSelect.querySelector("option[value='OSS']").disabled = true;
+      } else {
+        ruoloCollegaSelect.value = "";
+        ruoloCollegaSelect.querySelector("option[value='OSS']").disabled = false;
+        ruoloCollegaSelect.querySelector("option[value='Infermiere']").disabled = false;
+      }
+
+      const ruoloCollega = ruoloCollegaSelect.value;
+      let colleghi = ruoloCollega === "OSS" ? [...turnistiOSS, ...semiturnistiOSS] : ruoloCollega === "Infermiere" ? turnistiInfermiere : [];
+
+      selectCollega.innerHTML = "<option value=''>-- Seleziona Nome --</option>";
+      colleghi.forEach(c => {
+        if (c.nome !== currentUser) {
+          selectCollega.innerHTML += `<option value="${c.nome}">${c.nome}</option>`;
+        }
+      });
+
+      aggiornaIntestazioniTabella();
+      console.log("Selezioni aggiornate per ruolo:", ruoloRichiedente);
+    }
+
+    function creaSelectTurno(name) {
+      return `
+        <select name="${name}" required>
+          <option value="">-- Seleziona --</option>
+          <option value="Mattina">Mattina</option>
+          <option value="Pomeriggio">Pomeriggio</option>
+          <option value="Notte">Notte</option>
+          <option value="Smonto">Smonto</option>
+          <option value="Riposo">Riposo</option>
+        </select>
+      `;
+    }
+
+    function aggiornaIntestazioniTabella() {
+      const nomeRichiedente = document.getElementById("nomeRichiedente").value || "Richiedente";
+      const nomeCollega = document.getElementById("nomeCollega").value || "Collega";
+      document.getElementById("headerRichiedente").textContent = `Turno ${nomeRichiedente}`;
+      document.getElementById("headerCollega").textContent = `Turno ${nomeCollega}`;
+    }
+
+    function updateTabellaTurni() {
+      const numeroGiorni = parseInt(document.getElementById("giorniCambio").value);
+      const giornoCambio = document.getElementById("giornoCambio").value;
+      const tabellaTurni = document.getElementById("turniTabella");
+
+      const turnoRichiedente = document.getElementById("nuovoTurnoRichiedente").value || "-";
+      const turnoCollega = document.getElementById("nuovoTurnoCollega").value || "-";
+
+      tabellaTurni.innerHTML = "";
+
+      if (!giornoCambio) return;
+
+      const startDate = new Date(giornoCambio);
+      for (let i = 0; i < numeroGiorni; i++) {
+        const giorno = new Date(startDate);
+        giorno.setDate(giorno.getDate() + i);
+        const formattedDate = giorno.toLocaleDateString("it-IT");
+
+        let row = `<tr><td>${formattedDate}</td>`;
+        if (i === 0) {
+          row += `<td>${turnoRichiedente}</td><td>${turnoCollega}</td>`;
+        } else {
+          row += `<td>${creaSelectTurno("turnoRichiedente" + i)}</td><td>${creaSelectTurno("turnoCollega" + i)}</td>`;
+        }
+        row += "</tr>";
+        tabellaTurni.innerHTML += row;
+      }
+
+      aggiornaIntestazioniTabella();
+    }
+
+    async function submitRequest() {
+      const data = document.getElementById("data").value;
+      const ruoloRichiedente = document.getElementById("ruoloRichiedente").value;
+      const nomeRichiedente = document.getElementById("nomeRichiedente").value;
+      const giornoCambio = document.getElementById("giornoCambio").value;
+      const vecchioTurnoRichiedente = document.getElementById("vecchioTurnoRichiedente").value;
+      const nuovoTurnoRichiedente = document.getElementById("nuovoTurnoRichiedente").value;
+      const ruoloCollega = document.getElementById("ruoloCollega").value;
+      const nomeCollega = document.getElementById("nomeCollega").value;
+      const vecchioTurnoCollega = document.getElementById("vecchioTurnoCollega").value;
+      const nuovoTurnoCollega = document.getElementById("nuovoTurnoCollega").value;
+      const firma = document.getElementById("firma").value;
+      const numeroGiorni = parseInt(document.getElementById("giorniCambio").value);
+
+      if (!data || !ruoloRichiedente || !nomeRichiedente || !giornoCambio || !vecchioTurnoRichiedente || !nuovoTurnoRichiedente || !ruoloCollega || !nomeCollega || !vecchioTurnoCollega || !nuovoTurnoCollega || !firma) {
+        alert("Compila tutti i campi obbligatori!");
+        return;
+      }
+
+      if (nomeRichiedente !== currentUser) {
+        alert("Puoi inviare richieste solo a tuo nome!");
+        return;
+      }
+
+      const startDate = new Date(giornoCambio);
+      for (let i = 0; i < numeroGiorni; i++) {
+        const giorno = new Date(startDate);
+        giorno.setDate(giorno.getDate() + i);
+        const dateStr = giorno.toISOString().split("T")[0];
+
+        const richiesta = {
+          data,
+          ruoloRichiedente,
+          nomeRichiedente,
+          giornoCambio: dateStr,
+          vecchioTurnoRichiedente: i === 0 ? vecchioTurnoRichiedente : document.getElementsByName(`turnoRichiedente${i}`)[0]?.value || "-",
+          nuovoTurnoRichiedente: i === 0 ? nuovoTurnoRichiedente : document.getElementsByName(`turnoRichiedente${i}`)[0]?.value || "-",
+          ruoloCollega,
+          nomeCollega,
+          vecchioTurnoCollega: i === 0 ? vecchioTurnoCollega : document.getElementsByName(`turnoCollega${i}`)[0]?.value || "-",
+          nuovoTurnoCollega: i === 0 ? nuovoTurnoCollega : document.getElementsByName(`turnoCollega${i}`)[0]?.value || "-",
+          firma,
+          stato: "pendente",
+          numeroGiorni
+        };
+
+        await saveRequest(richiesta);
+      }
+
+      alert("Richiesta inviata con successo!");
+      document.getElementById("cambioTurnoForm").reset();
+      document.getElementById("nomeRichiedente").value = currentUser;
+      document.getElementById("nomeRichiedente").disabled = true;
+      updateTabellaTurni();
+    }
+
+    // Event Listeners
+    document.getElementById("ruoloRichiedente").addEventListener("change", aggiornaSelezioni);
+    document.getElementById("ruoloCollega").addEventListener("change", aggiornaSelezioni);
+    document.getElementById("nomeRichiedente").addEventListener("change", aggiornaIntestazioniTabella);
+    document.getElementById("nomeCollega").addEventListener("change", aggiornaIntestazioniTabella);
+    document.getElementById("nuovoTurnoRichiedente").addEventListener("change", updateTabellaTurni);
+    document.getElementById("nuovoTurnoCollega").addEventListener("change", updateTabellaTurni);
+    document.getElementById("giorniCambio").addEventListener("change", updateTabellaTurni);
+    document.getElementById("giornoCambio").addEventListener("change", updateTabellaTurni);
+
+    // Inizializzazione
+    initUserSelect();
+    aggiornaSelezioni();
+    document.getElementById("loginSection").style.display = "block";
+  </script>
+</body>
+</html>
